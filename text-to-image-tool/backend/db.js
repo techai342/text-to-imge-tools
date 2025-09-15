@@ -1,26 +1,19 @@
-const { Pool } = require("pg");
-const fs = require("fs");
+const { Pool } = require('pg');
+require('dotenv').config();
 
-let pool;
+// Create database connection pool
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
 
-async function initDB() {
-  if (pool) return pool;
+// Test database connection
+pool.on('connect', () => {
+  console.log('✅ Database connected successfully');
+});
 
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-  });
+pool.on('error', (err) => {
+  console.error('❌ Database connection error:', err.message);
+});
 
-  // Run migration (init.sql)
-  const initSql = fs.readFileSync(__dirname + "/migrations/init.sql", "utf-8");
-  await pool.query(initSql);
-
-  console.log("✅ Database initialized");
-  return pool;
-}
-
-function getDB() {
-  if (!pool) throw new Error("DB not initialized");
-  return pool;
-}
-
-module.exports = { initDB, getDB };
+module.exports = { pool };
