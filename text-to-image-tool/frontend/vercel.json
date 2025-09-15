@@ -4,6 +4,6 @@
   "devCommand": "npm run dev",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/(.*)", "dest": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
