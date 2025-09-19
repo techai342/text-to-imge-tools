@@ -1,29 +1,28 @@
 const express = require('express');
 const router = express.Router();
 
-// Actual image generation function
+// POST route for image generation
 router.post('/image', async (req, res) => {
   try {
     const { prompt } = req.body;
     
-    // ✅ Yahan AI API integrate karo (Stable Diffusion, DALL-E, etc.)
-    // For now, mock response
-    const imageUrl = await generateAIImage(prompt); // AI function banani hogi
+    // Mock response - replace with actual AI API later
+    const imageUrl = https://via.placeholder.com/512/0077ff/ffffff?text=${encodeURIComponent(prompt)};
     
     res.json({
       success: true,
+      message: "Image generated successfully!",
       imageUrl: imageUrl,
       prompt: prompt
     });
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error:", error);
+    res.status(500).json({ 
+      success: false,
+      error: "Internal server error" 
+    });
   }
 });
-
-// Mock AI function (abhi ke liye)
-async function generateAIImage(prompt) {
-  // Actual AI API integration yahan aayega
-  return "https://via.placeholder.com/512/0077ff/ffffff?text=" + encodeURIComponent(prompt);
-}
 
 module.exports = router;
